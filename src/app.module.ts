@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { GraphQLModule } from "@nestjs/graphql";
 import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import * as Joi from "joi";
 import { RestaurantsModule } from "./restaurants/restaurants.module";
 import { getEnvFileName } from "./utils/getEnvFileName";
 
@@ -11,6 +12,16 @@ import { getEnvFileName } from "./utils/getEnvFileName";
             "isGlobal": true,
             "envFilePath": getEnvFileName(),
             "ignoreEnvFile": process.env.NODE_ENV === "production",
+            "validationSchema": Joi.object({
+                "NODE_ENV": Joi.string()
+                    .valid("development", "production")
+                    .required(),
+                "DB_HOST": Joi.string().required(),
+                "DB_PORT": Joi.string().required(),
+                "DB_USER": Joi.string().required(),
+                "DB_PASSWORD": Joi.string().required(),
+                "DB_NAME": Joi.string().required(),
+            }),
         }),
         TypeOrmModule.forRoot({
             "type": "postgres",
