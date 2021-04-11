@@ -1,4 +1,4 @@
-## User Model:
+## User Entity:
 
 - id
 - createdAt
